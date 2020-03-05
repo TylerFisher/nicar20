@@ -24,6 +24,7 @@ class Annotation(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True
     )
+    publish_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "Annotation: " + self.tweet.text
