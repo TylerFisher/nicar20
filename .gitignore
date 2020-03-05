@@ -151,4 +151,4 @@ venv.bak/
 # Temporary Files
 tmp/
 
-example/db.sqlite3
+db.sqlite3
