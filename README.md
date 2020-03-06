@@ -1,6 +1,5 @@
-![POLITICO](https://rawgithub.com/The-Politico/src/master/images/logo/badge.png)
 
-# full-stack-react-example
+# How to build a data-driven app that never goes down
 
 ### Quickstart
 
