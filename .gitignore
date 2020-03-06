@@ -152,4 +152,4 @@ venv.bak/
 tmp/
 
 db.sqlite3
-frontend/src/data/*.json
+frontend/public/data/*.json

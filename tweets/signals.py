@@ -10,11 +10,11 @@ from tweets.serializers import TweetSerializer, AnnotationSerializer
 @receiver(post_save, sender=Tweet)
 def publish_recent_tweets(sender, instance, **kwargs):
     cmd_path = os.path.dirname(os.path.realpath(__file__))
-    data_path = os.path.join(cmd_path, "frontend/src/data/")
-    recent_tweets = Tweet.objects.all().order_by("-created_at")
+    data_path = os.path.join(cmd_path, "../frontend/public/data/")
+    recent_tweets = Tweet.objects.all().order_by("-created_at")[:50]
     serialized = TweetSerializer(recent_tweets, many=True).data
 
-    with open(os.path.join(data_path, "recent_tweets.json"), 'w') as f:
+    with open(os.path.join(data_path, "recent-tweets.json"), 'w') as f:
         json.dump(serialized, f)
 
 
@@ -22,7 +22,7 @@ def publish_recent_tweets(sender, instance, **kwargs):
 def publish_annotations(sender, instance, **kwargs):
     print("running signal")
     cmd_path = os.path.dirname(os.path.realpath(__file__))
-    data_path = os.path.join(cmd_path, "../frontend/src/data/")
+    data_path = os.path.join(cmd_path, "../frontend/public/data/")
     annotations = Annotation.objects.all()
     serialized = AnnotationSerializer(annotations, many=True).data
 
