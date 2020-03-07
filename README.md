@@ -42,6 +42,7 @@ We need to:
 
 - Build JSON serializers for our models
 - Set up signals for publishing live data
+- Add viewsets for our API
 - Set up our frontend to accept the data
 - Make it live!
 
@@ -82,8 +83,60 @@ class AnnotationSerializer(serializers.ModelSerializer):
         fields = ["tweet", "annotation", "author", "publish_date"]
 ```
 
+##### Step two: Add viewsets for our API
 
-##### Step two: Set up signals for publishing live data
+Next, we'll add viewsets for our API. This allows us to explore the API from the browser.
+
+First, create the viewsets in `tweets/viewsets.py`:
+
+```
+from rest_framework import viewsets
+from tweets.models import Tweet, Annotation
+from tweets.serializers import TweetSerializer, AnnotationSerializer
+
+
+class TweetViewSet(viewsets.ModelViewSet):
+    queryset = Tweet.objects.all()
+    serializer_class = TweetSerializer
+
+
+class AnnotationViewSet(viewsets.ModelViewSet):
+    queryset = Annotation.objects.all()
+    serializer_class = AnnotationSerializer
+```
+
+Then, attach URLs to your viewsets by writing the following in `tweets/urls.py`.
+
+```
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+
+from .viewsets import TweetViewSet, AnnotationViewSet
+
+router = DefaultRouter()
+router.register(r'tweets', TweetViewSet)
+router.register(r'annotations', AnnotationViewSet)
+
+urlpatterns = [
+    path('api/', include(router.urls)),
+]
+```
+
+Finally, attach your tweets app to the Django project's main URL config in `config/urls.py`.
+
+```
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('tweets/', include('tweets.urls'))
+]
+```
+
+Visit `localhost:8000/tweets/api` to start exploring your API.
+
+##### Step three: Set up signals for publishing live data
 
 Next, we'll create Django signals. Signals are functions that fire automatically when specific things happen in Django. For our purposes, we want to publish JSON every time something changes in our database.
 
@@ -143,7 +196,8 @@ def publish_annotations(sender, instance, **kwargs):
 
 Go into the Django admin at `localhost:8000/admin`, and create an annotation. You should see a JSON file at `frontend/public/annotations.json`.
 
-##### Step three: Set up our frontend to accept the data
+
+##### Step four: Set up our frontend to accept the data
 
 To get the data to React, we need to set up a fetch request that will get the data we just published from our signals. In `frontend/src/stores/annotations/api.js`, add the following:
 
@@ -182,7 +236,7 @@ store.dispatch(fetchAnnotations());
 export default store;
 ```
 
-##### Step four: make it live!
+##### Step five: make it live!
 
 To make this app truly "live", it needs to download the data more than on page load. This way, people don't have to refresh to get new data. In `frontend/src/stores/index.js`, above the last line, add the following:
 
