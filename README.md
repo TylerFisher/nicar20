@@ -1,6 +1,8 @@
 
 # How to build a data-driven app that never goes down
 
+[Slides](https://docs.google.com/presentation/d/16iYbBlPa2pOwUjRTKzUT2siucrSCNIUzdyFcU_A0kVg/edit#slide=id.p)
+
 ### Quickstart
 
 First, install requirements and load data
@@ -241,7 +243,7 @@ export default store;
 To make this app truly "live", it needs to download the data more than on page load. This way, people don't have to refresh to get new data. In `frontend/src/stores/index.js`, above the last line, add the following:
 
 ```
-setTimeout(() => {
+setInterval(() => {
   store.dispatch(fetchAnnotations())
 }, 5000);
 ```
