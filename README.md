@@ -13,7 +13,7 @@ $ pipenv run python manage.py migrate
 $ pipenv run python manage.py load_tweets
 $ cd frontend
 $ npm install
-$ python manage.py createsuperuser
+$ pipenv run python manage.py createsuperuser
 ```
 
 ##### Running a development server
@@ -43,8 +43,8 @@ We're going to build a backend that publishes live data (annotations of Donald T
 We need to:
 
 - Build JSON serializers for our models
-- Set up signals for publishing live data
 - Add viewsets for our API
+- Set up signals for publishing live data
 - Set up our frontend to accept the data
 - Make it live!
 
